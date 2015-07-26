@@ -20,4 +20,60 @@ INSERT INTO expenses_expense (Name, Cost ,Date)  VALUES ("Uber incoming", 50.0 ,
  {"meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1}, "objects": [
 
 
- {"Cost": 55.0, "Name": "Sim Card", "id": 2, "resource_uri": "/api/expense/1/"}]}
+ {"Cost": 55.0, "Name": "Sim Card", "id": 2, "resource_uri": "/api/expense/1/"} 
+ ]}
+
+
+ Use callbacks instead of promises for fetching json data
+ https://github.com/balinterdi/rock-and-roll/releases/tag/episode-7
+ http://balinterdi.com/2014/02/26/a-common-resource-route-pattern-in-ember-dot-js.html
+
+
+ http://ember.vicramon.com/ember-route
+
+ model is a function hook that’s called upon entering a route. The result of the model function is then accessible by other objects.
+
+The store is an Ember data construct that you go through when dealing with persisted records. find fetches records of the type you pass it. It returns a promise, which in this case will return a DS.RecordArray object once you call then on it. DS.RecordArray is essentially an array of models.
+
+Route Hooks
+Route objects are really all about using hooks to prepare data and perform any setup actions required for the controller.
+
+model is just one of a series of hooks that are called when you enter a route. Here are a few more that you’ll get to know, listed in order of when they are called.
+
+App.UsersRoute = Ember.Route.extend
+
+  beforeModel: (transition) ->
+
+  model: (params, transition) ->
+
+  afterModel: (model, transition) ->
+
+  activate: ->
+
+  setupController: (controller, model) ->
+    controller.set 'model', model
+    #or @_super(arguments...)
+
+  deactivate: ->
+beforeModel is called immediately before model is called.
+
+model we just went over.
+
+afterModel is called after the model is resolved (i.e. either pulled down from the server or pulled out of the store).
+
+activate is called after all of the model hooks have completed, meaning that the route is now active.
+
+setupController is where you would do any controller setup. You get access to the controller itself as an argument. Note that if you implement setupController you will need to set the model property of the controller to the model argument, because this hook overrides the parent. If you don’t do this then the controller will not have its model property set. You could also call @_super(arguments...) to accomplish the same thing.
+
+deactivate is called when you exit the route. It will not get called if you just change the model but stay on the same route. For example deactivate would not get called if you changed from /users/1 to /users/2
+
+
+The Transition Object
+The transition argument being passed into the route model hooks can be used to abort the transition. For example, say we have a HouseRoute and you don’t like red houses:
+
+App.HouseRoute = Ember.Route.extend
+
+  afterModel: (model, transition) ->
+    transition.abort() if model.get('color') is 'red'
+Here I’m using afterModel, because the model is resolved and I can ask for its color property. If you abort, Ember will just go back to whatever route you came from. This can be handy for error checking, confirmation dialogs, and locking certain parts of your app depending on state.
+
