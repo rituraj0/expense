@@ -1,0 +1,23 @@
+ PRAGMA table_info(expenses_expense);
+
+INSERT INTO expenses_expense (Name, Cost ,Date)  
+VALUES ("Uber incoming", 50.0 ,"19-07-2015");
+
+INSERT INTO expenses_expense (Name, Cost ,Date)  VALUES ("Uber incoming", 50.0 ,"19/7/2015");
+
+ select * from expenses_expense ;
+
+ DELETE from expenses_expense
+
+
+ manage.py runserver 127.0.0.1:8001 
+
+ http://localhost:8000/api/expense/?format=json
+
+ INSERT INTO expenses_expense (Name, Cost )  VALUES ("Uber incoming", 50.0 );
+
+
+ {"meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1}, "objects": [
+
+
+ {"Cost": 55.0, "Name": "Sim Card", "id": 2, "resource_uri": "/api/expense/1/"}]}
