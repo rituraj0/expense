@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        
+        <script type="text/javascript" src="js/handlebars.js"></script>
+        <script type="text/javascript" src="js/ember-template-compiler.js"></script>
+        <script type="text/javascript" src="js/ember.debug.js"></script>
+        <script type="text/javascript" src="js/ember.js"></script>
+        <script type="text/javascript" src="js/ember-data.js"></script>
+        <script type="text/javascript" src="js/ember-data.js.map"></script> 
+        <script src="js/app.js"></script>
+  
+  <title>Ember.js Playground</title>
+  </head>
+  
+  <body>
+
+  <script type="text/x-handlebars" data-template-name="index">
+    {{ outlet }}
+  </script>
+
+  <script type="text/x-handlebars" data-template-name="expense">
+    <ul>
+        {{#each controller.objects as exp}}        
+        <li> {{ exp.Name }}: {{ exp.Cost }}</li>
+        {{/each}}
+    </ul>
+  </script>
+
+  
+</body>
+</html>

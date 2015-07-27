@@ -77,3 +77,71 @@ App.HouseRoute = Ember.Route.extend
     transition.abort() if model.get('color') is 'red'
 Here I’m using afterModel, because the model is resolved and I can ask for its color property. If you abort, Ember will just go back to whatever route you came from. This can be handy for error checking, confirmation dialogs, and locking certain parts of your app depending on state.
 
+
+Jukebox = Ember.Application.create({
+  LOG_TRANSITIONS_INTERNAL: true
+});
+
+Jukebox.ApplicationAdapter = DS.FixtureAdapter.extend();
+
+Jukebox.IndexRoute = Ember.Route.extend({
+  model: function() {
+    return this.store.find('song');
+  }
+});
+
+Jukebox.IndexController = Ember.ArrayController.extend({
+  nowPlaying: null,
+  actions: {
+    playSong: function(song) {
+      this.set('nowPlaying', song);
+    }
+  }
+});
+
+
+// Models
+
+Jukebox.Song = DS.Model.extend({
+  name: DS.attr('string'),
+  artist: DS.belongsTo('artist'),
+  duration: DS.attr('number')
+});
+
+Jukebox.Artist = DS.Model.extend({
+  name: DS.attr('string'),
+  genre: DS.attr('string'),
+  songs: DS.hasMany('song')
+});
+
+
+// Fixture Data
+
+Jukebox.Song.FIXTURES = [
+  { id: 1, name: 'Blue Ridge Mountains', duration: 267, artist: 1 },
+  { id: 2, name: 'White Winter Hymnal', duration: 149, artist: 1 }
+];
+
+Jukebox.Artist.FIXTURES = [
+  { id: 1, name: 'Fleet Foxes', genre: 'Folk', songs: [1, 2] }
+];
+
+// Helpers
+
+Ember.Handlebars.registerBoundHelper('duration-to-time', function(seconds) {
+  var minutes = seconds > 60? parseInt(seconds/60, 10) : 0,
+      leftOverSeconds = seconds > 60? seconds % (minutes * 60) : seconds;
+  
+  leftOverSeconds = (leftOverSeconds < 10)? '0'+leftOverSeconds : leftOverSeconds;
+  return minutes + ':' + leftOverSeconds;
+});
+
+Upar wala:
+
+http://emberjs.jsbin.com/yeqob/10/edit?js,output
+
+http://andycrum.com/2014/06/02/getting-started-with-ember-data/
+
+
+
+
